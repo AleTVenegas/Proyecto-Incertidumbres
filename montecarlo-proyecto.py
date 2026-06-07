@@ -31,16 +31,16 @@ c = 450 # J/(kg K)
 
 M = np.array([0.00688100, 0.00688098, 0.00688098, 0.00688111, 0.00688108, 0.00688103])  # kg
 
-km = 2
-
 mprom = np.mean(M)
-mres = 0.00000001   # kg
-umres = mres / np.sqrt(12)
+
+km = 2
+mcert = 0.000002 # kg
+umcert = mcert / km
 
 umrep = np.std(M, ddof=1) / np.sqrt(len(M))
 
-mcert = 0.000002 # kg
-umcert = mcert / km
+mres = 0.00000001   # kg
+umres = mres / np.sqrt(12)
 
 # ============================================================
 # Diámetro
@@ -48,17 +48,16 @@ umcert = mcert / km
 
 D = np.array([0.01187, 0.01187, 0.01186, 0.01187, 0.01187, 0.01186])  # m
 
-kd = 2
-
 dprom = np.mean(D)
 
-dres = 0.00001   # m
-udres = dres / np.sqrt(12)
+kd = 2
+dcert = 0.00002  # m
+udcert = dcert / kd
 
 udrep = np.std(D, ddof=1) / np.sqrt(len(D))
 
-dcert = 0.00002  # m
-udcert = dcert / kd
+dres = 0.00001   # m
+udres = dres / np.sqrt(12)
 
 # ============================================================
 # Temperatura ambiente
@@ -66,33 +65,19 @@ udcert = dcert / kd
 
 Tamb = np.array([28.1, 28.5, 28.7, 28.9, 28.6, 28.8, 29.2, 28.6, 28.3, 28.3])  # °C
 
-ktamb = 2
-
 tambprom = np.mean(Tamb)
+
+ktamb = 2
+tambcert = 0.6  # °C
+utambcert = tambcert / ktamb
 
 tambres = 0.1   # °C
 utambres = tambres / np.sqrt(12)
 
 utambrep = np.std(Tamb, ddof=1) / np.sqrt(len(Tamb))
 
-tambcert = 0.6  # °C
-utambcert = tambcert / ktamb
-
 # ============================================================
-# Tiempo
-# ============================================================
-
-Tiempo = np.array([270, 270, 270, 270, 270, 270, 270, 270, 270, 270]) # s
-
-tiempoprom = np.mean(Tiempo)
-
-tiempores = 1/60 # s
-utiempores = tiempores / np.sqrt(12)
-
-utiemporep = np.std(Tiempo, ddof=1) / np.sqrt(len(Tiempo))
-
-# ============================================================
-# Coeficiente de enfriamiento
+# Tasa de enfriamiento
 # ============================================================
 
 k = np.array([0.00510096620748971, 0.00502045445353014, 0.00480975341689432, 0.00525998486220582, 0.00531372787002526, 0.00520215735227422, 0.00579315943666277, 0.00517885584225008, 0.00547634818039660, 0.00472998173761074])  # s^-1, van con toda la precisión que tenía Excel
@@ -114,9 +99,6 @@ Tamb_mc = (tambprom + np.random.uniform(-tambres/2, tambres/2, N) + np.random.no
 # Diámetro
 D_mc = (dprom + np.random.uniform(-dres/2, dres/2, N) + np.random.normal(0, udrep, N) + np.random.normal(0, udcert, N))
 
-# Tiempo
-Tiempo_mc= (tiempoprom + np.random.uniform(-tiempores/2, tiempores/2, N) + np.random.normal(0, utiemporep, N))
-
 # Coeficiente enfriamiento
 k_mc = (kprom + np.random.normal(0, ukrep, N))
 
@@ -134,8 +116,8 @@ u_h = np.std(h_lista, ddof=1)
 kh = 2
 U_h = kh * u_h
 
-h025 = np.percentile(h_lista, 2.5)
-h975 = np.percentile(h_lista, 97.5)
+h025 = np.percentile(h_lista, 2.275)  # (100 - 95.45)/2
+h975 = np.percentile(h_lista, 97.725) # 100 - (100 - 95.45)/2
 
 # ============================================================
 # Resultados
